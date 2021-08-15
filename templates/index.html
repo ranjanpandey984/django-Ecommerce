@@ -86,9 +86,10 @@
 							<h2>Brands</h2>
 							<div class="brands-name">
 								<ul class="nav nav-pills nav-stacked">
-									<!-- {% for brand in brand_product %} -->
-									<li><a href="{{brand.get_url}}"> <span class="pull-right">(50)</span>Acne</a></li>
-									<!-- {% endfor %} -->
+
+									 {% for brand in brands %} 
+									<li><a href="{{brand.get_url}}"> <span class="pull-right">(50)</span>{{brand.title}}</a></li>
+									 {% endfor %}
 									
 								</ul>
 							</div>
