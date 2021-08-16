@@ -19,6 +19,13 @@ class HomeView(BaseView):
 		return render(request,'index.html',self.views)
 
 
+class ProductDetailView(BaseView):
+	def get(self,request,slug):
+		self.views['detail_product'] = Product.objects.filter(slug = slug)
+		return render (request,'product-details.html',self.views)
+
+
+
 class SubCategoryViews(BaseView):
 	def get(self,request,slug):
 		id = SubCategory.objects.get(slug = slug).id
@@ -33,3 +40,11 @@ class BrandViews(BaseView):
 		self.views['brands_product'] = Product.objects.filter(brand_id = id)
 		return render(request,'brand.html',self.views)
 		
+
+class Search(BaseView):
+	def get(self,request):
+		query = request.GET.get('query', None)
+		if not query:
+			return redirect('/')
+		self.views['search_query'] = Product.objects.filter(title__icontains = query)  #icontains bhaneko search gareko sanga mildo juldo data
+		return render(request,'search.html',self.views)

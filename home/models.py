@@ -36,23 +36,6 @@ class Slider(models.Model):
 		return self.title
 
 
-class Product(models.Model):
-	title = models.CharField(max_length = 500)
-	price = models.IntegerField()
-	discounted_price = models.IntegerField()
-	status = models.CharField(max_length = 100, choices = (('active','active'),('','inactive')))
-	image = models.ImageField(upload_to = 'media')
-	description = models.TextField(blank = True)
-	labels = models.CharField(max_length = 100, choices = (('new','new'),('hot','hot'),('sale','sale')))
-	category = models.ForeignKey(Category, on_delete = models.CASCADE)
-	subcategory = models.ForeignKey(SubCategory, on_delete = models.CASCADE)
-	brand = models.ForeignKey('Brand', on_delete = models.CASCADE, null = True)
-	stock = models.CharField(max_length = 100, choices = (('In Stock','In Stock'),('Out of Stock','Out of Stock')))
-
-	def __str__(self):
-		return self.title
-		
-
 class Brand(models.Model):
 	title = models.CharField(max_length = 400)
 	slug = models.CharField(max_length = 500, unique = True) 
@@ -63,6 +46,28 @@ class Brand(models.Model):
 
 	def get_url(self):
 		return reverse("home:brand",kwargs = {'slug':self.slug})
+
+
+class Product(models.Model):
+	title = models.CharField(max_length = 500)
+	slug = models.CharField(max_length = 500, default = "", blank = True) 
+	price = models.IntegerField()
+	discounted_price = models.IntegerField()
+	status = models.CharField(max_length = 100, choices = (('active','active'),('','inactive')))
+	image = models.ImageField(upload_to = 'media')
+	description = models.TextField(blank = True)
+	labels = models.CharField(max_length = 100, choices = (('new','new'),('hot','hot'),('sale','sale')))
+	category = models.ForeignKey(Category, on_delete = models.CASCADE)
+	subcategory = models.ForeignKey(SubCategory, on_delete = models.CASCADE)
+	brand = models.ForeignKey(Brand, on_delete = models.CASCADE, null = True)
+	stock = models.CharField(max_length = 100, choices = (('In Stock','In Stock'),('Out of Stock','Out of Stock')))
+
+	def __str__(self):
+		return self.title
+	
+	def get_url(self):
+		return reverse("home:product",kwargs = {'slug':self.slug})
+
 
 
 
