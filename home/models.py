@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse
 # Create your models here.
+
+
 class Category(models.Model):
 	title = models.CharField(max_length = 400)
 	slug = models.CharField(max_length = 500, unique = True) #Slug bhaneko ID jastai primary key 
@@ -70,4 +72,15 @@ class Product(models.Model):
 
 
 
+
+class Cart(models.Model):
+	username = models.CharField(max_length = 300)
+	slug = models.CharField(max_length = 300)
+	quantity = models.IntegerField(default = 1)
+	date = models.DateTimeField(auto_now_add = True)
+	checkout = models.BooleanField(default = False)
+	items = models.ForeignKey(Product, on_delete = models.CASCADE, null = True)
+
+	def __str__(self):
+		return self.username
 

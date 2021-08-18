@@ -1437,8 +1437,12 @@ h2.title {
 
 }
 
+.signup{
+  display: grid;
+  place-items: center;
+}
 .signup-form {
-
+  width: 50%;
 }
 
 .login-form h2, .signup-form h2 {

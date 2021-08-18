@@ -6,7 +6,7 @@
 		<div class="container">
 			<div class="row">
 				
-				<div class="col-sm-4">
+				<div class="col-sm-12 signup">
 					<div class="signup-form"><!--sign up form-->
 						<h2>LOGIN !</h2>
 
@@ -18,7 +18,7 @@
 							{% csrf_token %}
 							<!-- <input name = "username" type="text" placeholder="Name"/> -->
 
-							{{ form.username }}
+							{{ form.username }}  <!-- using default form of django -->
 							{{ form.password }}
 
 							<!-- <input name = "email" type="email" placeholder="Email Address"/>

@@ -52,7 +52,7 @@ class Search(BaseView):
 		return render(request,'search.html',self.views)
 
 
-def Signup(request):
+def signup(request):
 	if request.method == 'POST':
 		username = request.POST['username']
 		email = request.POST['email']
@@ -79,3 +79,26 @@ def Signup(request):
 			messages.error(request,'2 passwords didnot match. ')
 
 	return render(request,'signup.html')
+
+
+
+
+def add_to_cart(request):
+	if request.method == 'POST':
+		slug = request.POST['slug']
+		quantity = request.POST['quantity']
+		username = request.user.username
+		items = Product.objects.filter(slug = slug)[0]
+		print(items)
+
+		data = Cart.objects.create(
+			slug = slug,
+			quantity = quantity,
+			username = username,
+			items = items
+
+			)
+		data.save()
+		return redirect ('/')
+
+
