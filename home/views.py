@@ -76,7 +76,7 @@ def signup(request):
 				messages.success(request,'You are registered successfully. ')
 				return redirect('/signup')	
 		else:
-			messages.error(request,'2 passwords didnot match. ')
+			messages.error(request,'2 passwords didnot match.')
 
 	return render(request,'signup.html')
 
@@ -89,16 +89,29 @@ def add_to_cart(request):
 		quantity = request.POST['quantity']
 		username = request.user.username
 		items = Product.objects.filter(slug = slug)[0]
-		print(items)
+		price = Product.objects.get(slug = slug).price
+		total = int(quantity) * int(price)
 
 		data = Cart.objects.create(
 			slug = slug,
 			quantity = quantity,
 			username = username,
-			items = items
+			items = items,
+			total = total
 
 			)
 		data.save()
 		return redirect ('/')
 
 
+class CartView(BaseView):
+	def get(self, request):
+		self.views['my_cart'] = Cart.objects.filter(username = request.user.username,checkout = False)
+		return render(request,'cart.html',self.views)
+
+
+def remove_cart(request,slug):
+	if Cart.objects.filter(username = request.user.username,checkout = False, slug = slug) .exists():
+		Cart.objects.filter(username = request.user.username,checkout = False, slug = slug).delete()
+
+	return redirect('/cart')

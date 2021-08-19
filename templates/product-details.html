@@ -125,7 +125,7 @@
 									<form action="{% url 'home:add-to-cart' %}" method="POST">
 									{% csrf_token %}
 									<label>Quantity:</label>
-									<input name="quantity" type="number" value="1" />
+									<input name="quantity" type="number"  required>
 									<input name="slug" value = "{{detail.slug}}" type="hidden" >
 									<button type="submit" class="btn btn-fefault cart">
 										<i class="fa fa-shopping-cart"></i>

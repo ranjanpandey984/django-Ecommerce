@@ -80,7 +80,10 @@ class Cart(models.Model):
 	date = models.DateTimeField(auto_now_add = True)
 	checkout = models.BooleanField(default = False)
 	items = models.ForeignKey(Product, on_delete = models.CASCADE, null = True)
+	total = models.IntegerField(default = 0)
 
 	def __str__(self):
 		return self.username
 
+	def get_url(self):
+		return reverse("home:remove-cart",kwargs = {'slug':self.slug})
