@@ -115,3 +115,31 @@ def remove_cart(request,slug):
 		Cart.objects.filter(username = request.user.username,checkout = False, slug = slug).delete()
 
 	return redirect('/cart')
+
+
+
+
+# ------------------------API------------------------------------------------------------------------------------------------
+
+
+from rest_framework import routers, serializers, viewsets
+from .serializers import *
+from rest_framework import generics
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter, SearchFilter
+
+
+class ItemViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ItemSerializer
+
+
+class ItemFilterView(generics.ListAPIView):
+	queryset = Product.objects.all()
+	serializer_class = ItemSerializer
+	filter_backends = (DjangoFilterBackend,OrderingFilter,SearchFilter)
+	filter_fields = ['id','price','labels','category','subcategory']
+	ordering_fields = ['id','title','price']
+	search_fields = ['title','description']
+
+	

@@ -16,7 +16,7 @@
 						
 						<div class="carousel-inner">
 							{% for slider in sliders %}
-							<div class="item {{slider.status}}">
+							<div class="item {% if slider.rank == 1 %} active {% endif %} ">
 								<div class="col-sm-6">
 									<h1><span>E</span>-SHOPPER</h1>
 									<h2>{{slider.title}}</h2>
