@@ -31,7 +31,7 @@ class Slider(models.Model):
 	description = models.TextField()
 	image = models.ImageField(upload_to = 'media')
 	rank = models.IntegerField()
-	status = models.CharField(max_length = 100, choices = (('active','active'),('','inactive')))
+	status = models.CharField(max_length = 100, blank = True, choices = (('active','active'),('','inactive')))
 	# first active bhaneko database ko lagi value ho and pachadiko active dropdown ko value ho jun frontend ma click huncha
 
 	def __str__(self):
@@ -55,7 +55,7 @@ class Product(models.Model):
 	slug = models.CharField(max_length = 500, default = "", blank = True) 
 	price = models.IntegerField()
 	discounted_price = models.IntegerField()
-	status = models.CharField(max_length = 100, choices = (('active','active'),('','inactive')))
+	status = models.CharField(max_length = 100, blank = True, choices = (('active','active'),('','inactive')))
 	image = models.ImageField(upload_to = 'media')
 	description = models.TextField(blank = True)
 	labels = models.CharField(max_length = 100, choices = (('new','new'),('hot','hot'),('sale','sale')))

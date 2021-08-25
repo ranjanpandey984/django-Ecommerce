@@ -3,6 +3,8 @@ from django.views.generic import View
 from .models import *
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
+from django.shortcuts import render
 
 # Create your views here.
 
@@ -32,8 +34,10 @@ class SubCategoryViews(BaseView):
 	def get(self,request,slug):
 		id = SubCategory.objects.get(slug = slug).id
 		self.views['subcategories_product'] = Product.objects.filter(subcategory_id = id)
+		paginator = Paginator(self.views['subcategories_product'], 1) #Show 25 contacts per page
+		page_number = request.GET.get('page')
+		self.views['page_obj'] = paginator.get_page(page_number)
 		return render(request,'subcategory.html',self.views)
-
 
 
 class BrandViews(BaseView):
@@ -92,15 +96,23 @@ def add_to_cart(request):
 		price = Product.objects.get(slug = slug).price
 		total = int(quantity) * int(price)
 
-		data = Cart.objects.create(
-			slug = slug,
-			quantity = quantity,
-			username = username,
-			items = items,
-			total = total
+		if Cart.objects.filter(username = request.user.username,checkout = False, slug = slug).exists():
+			qty = Cart.objects.get(username = request.user.username,checkout = False, slug = slug).quantity
+			price = Product.objects.get(slug = slug).price
+			quantity = int(quantity) + int(qty)
+			total = int(price) * int(quantity)
+			Cart.objects.filter(username = request.user.username,checkout = False, slug = slug).update(quantity = quantity, total = total)
 
-			)
-		data.save()
+		else:
+			data = Cart.objects.create(
+				slug = slug,
+				quantity = quantity,
+				username = username,
+				items = items,
+				total = total
+
+				)
+			data.save()
 		return redirect ('/')
 
 
