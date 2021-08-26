@@ -139,6 +139,10 @@ from .serializers import *
 from rest_framework import generics
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.views import APIView
+from django.http import Http404
+from rest_framework import status
+from rest_framework.response import Response
 
 
 class ItemViewSet(viewsets.ModelViewSet):
@@ -155,3 +159,31 @@ class ItemFilterView(generics.ListAPIView):
 	search_fields = ['title','description']
 
 	
+class ItemDetailView(APIView):
+	def get_object(self, pk):
+		try:
+			return Product.objects.get(id = pk)
+		except Item.DoesNotExists:
+			raise Http404
+
+	def get(self,request,pk,format = None):
+		try:
+			item = self.get_object(pk)
+			serializer = ItemSerializer(item)
+			return Response(serializer.data)
+		except:
+			raise Http404
+
+	def put(self, request, pk, format = None):
+		item = self.get_object(pk)
+		serializer = ItemSerializer(item,data = request.data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data)
+		return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+
+	def delete(self, request, pk, format = None):
+		item = self.get_object(pk)
+		item.delete()
+		return Response("Record is deleted successfully!",status = status.HTTP_200_OK)

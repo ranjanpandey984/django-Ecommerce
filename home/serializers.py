@@ -7,5 +7,5 @@ from .models import *
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = "__all__"  
-        # or single gardai diney ho bhaney fields = [''] 
+        fields = ['id', 'title', 'price', 'status', 'labels' , 'category', 'subcategory', 'brand', 'stock']  
+        # sab rakhney bhaye "__all__" or single gardai diney ho bhaney fields = [''] 
