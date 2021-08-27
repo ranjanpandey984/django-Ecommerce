@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -25,10 +26,26 @@ class HomeView(BaseView):
 
 class ProductDetailView(BaseView):
 	def get(self,request,slug):
+		self.views['view_review'] = Review.objects.filter(slug = slug)
 		self.views['detail_product'] = Product.objects.filter(slug = slug)
+		self.views['slug'] = slug 
 		return render (request,'product-details.html',self.views)
 
-
+@login_required  #decorator ho 
+def review(request):
+	username = request.user.username
+	email = request.user.email
+	global slug 
+	slug = request.POST.get('slug')
+	comment = request.POST.get('comment')
+	data = Review.objects.create(
+		username = username,
+		email = email,
+		slug= slug,
+		comment = comment
+		)
+	data.save()
+	return redirect(f"/product/{slug}")
 
 class SubCategoryViews(BaseView):
 	def get(self,request,slug):
@@ -131,7 +148,7 @@ def remove_cart(request,slug):
 
 
 
-# ------------------------API------------------------------------------------------------------------------------------------
+# ------------------------  API  ------------------------------------------------------------------------------------------------
 
 
 from rest_framework import routers, serializers, viewsets

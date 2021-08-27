@@ -87,3 +87,16 @@ class Cart(models.Model):
 
 	def get_url(self):
 		return reverse("home:remove-cart",kwargs = {'slug':self.slug})
+
+
+class Review(models.Model):
+	username = models.CharField(max_length = 200)
+	email = models.CharField(max_length = 200)
+	slug = models.CharField(max_length = 100)
+	comment = models.TextField()
+	date = models.DateTimeField(auto_now_add = True)
+
+	def __str__(self):
+		return self.username
+
+	
